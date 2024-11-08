@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -95,7 +96,7 @@ fun MainContent(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Slider con el min a max
+        // Slider con el mínimo y el máximo
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -104,7 +105,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Mínimo:")
+                Text("Min:")
                 OutlinedTextField(
                     value = minValue.toString(),
                     onValueChange = { minValue = it.toFloatOrNull() ?: minValue },
@@ -115,7 +116,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Maximo:")
+                Text("Max:")
                 OutlinedTextField(
                     value = maxValue.toString(),
                     onValueChange = { maxValue = it.toFloatOrNull() ?: maxValue },
@@ -130,7 +131,7 @@ fun MainContent(modifier: Modifier = Modifier) {
         Slider(
             value = sliderValue,
             onValueChange = { sliderValue = it },
-            valueRange = minValue..maxValue, // Usamos los valores min y max proporcionados por el usuario
+            valueRange = minValue..maxValue, // Usamos los valores min y max que da el usuario
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -151,14 +152,12 @@ fun MainContent(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            val selectedIcon = iconOptions.find { it.first == finalIconName }?.second ?: Icons.Default.Help
-
-            // BadgedBox con el valor del slider
+            val selectedIcon = iconOptions.find { it.first == finalIconName }?.second ?: Icons.Default.Home
             BadgedBox(
                 modifier = Modifier.padding(16.dp),
                 badge = {
                     Badge {
-                        Text(finalSliderValue.toString()) // Aquí mostramos el valor final del slider (que se modifica segun quiera el usuario en el slider)
+                        Text(finalSliderValue.toString())
                     }
                 }
             ) {
