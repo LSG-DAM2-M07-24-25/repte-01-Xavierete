@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,9 +46,11 @@ fun MainContent(modifier: Modifier = Modifier) {
     )
 
     var selectedIconName by remember { mutableStateOf(iconOptions[0].first) }
-    var sliderValue by remember { mutableStateOf(3f) }
-    var minValue by remember { mutableStateOf(0f) }
-    var maxValue by remember { mutableStateOf(10f) }
+
+    // Cambiado a mutableFloatStateOf
+    var sliderValue by remember { mutableFloatStateOf(3f) }
+    var minValue by remember { mutableFloatStateOf(0f) }
+    var maxValue by remember { mutableFloatStateOf(10f) }
     var expanded by remember { mutableStateOf(false) }
 
     var finalIconName by remember { mutableStateOf(iconOptions[0].first) }
@@ -66,7 +67,7 @@ fun MainContent(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // Menu desplegable para seleccionar el icono
+        // Menu desplegable para seleccionar el icono, ahora encima del TextField
         Box {
             TextField(
                 value = selectedIconName,
@@ -78,9 +79,11 @@ fun MainContent(modifier: Modifier = Modifier) {
                     .clickable { expanded = !expanded }
             )
 
+            // El DropdownMenu ahora aparece encima del TextField
             DropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.padding(bottom = 8.dp) // Padding ajustado para separar del TextField
             ) {
                 iconOptions.forEach { (name, _) ->
                     DropdownMenuItem(
@@ -131,7 +134,7 @@ fun MainContent(modifier: Modifier = Modifier) {
         Slider(
             value = sliderValue,
             onValueChange = { sliderValue = it },
-            valueRange = minValue..maxValue, // Usamos los valores min y max que da el usuario
+            valueRange = minValue..maxValue, // Usamos los valores min y max proporcionados por el usuario
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -152,12 +155,14 @@ fun MainContent(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            val selectedIcon = iconOptions.find { it.first == finalIconName }?.second ?: Icons.Default.Home
+            val selectedIcon = iconOptions.find { it.first == finalIconName }?.second ?: Icons.Default.Home // Cambié el icono por uno predeterminado si no se encuentra
+
+            // BadgedBox con el valor del slider
             BadgedBox(
                 modifier = Modifier.padding(16.dp),
                 badge = {
                     Badge {
-                        Text(finalSliderValue.toString())
+                        Text(finalSliderValue.toString()) // Aquí mostramos el valor del slider
                     }
                 }
             ) {
