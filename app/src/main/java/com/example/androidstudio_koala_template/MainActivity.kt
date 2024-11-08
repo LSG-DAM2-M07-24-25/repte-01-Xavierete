@@ -38,9 +38,6 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
                         MyDropDownMenu(modifier = Modifier.padding(innerPadding))
-                        // Puedes agregar el slider aquí si es necesario
-                        // MyProSlider(modifier = Modifier.padding(innerPadding))
-                        // MyRangeSlider(modifier = Modifier.padding(innerPadding))
                     }
                 }
             }
@@ -53,7 +50,7 @@ class MainActivity : ComponentActivity() {
 fun MyDropDownMenu(modifier: Modifier = Modifier) {
     var selectedText: String by remember { mutableStateOf("") }
     var expanded: Boolean by remember { mutableStateOf(false) }
-    val hobbies = listOf("Play music", "Practice sport", "Programming", "Reading", "Other")
+    val hobbies = listOf("Add", "Call", "Email", "Delete", "Other options")
 
     Column(
         Modifier
