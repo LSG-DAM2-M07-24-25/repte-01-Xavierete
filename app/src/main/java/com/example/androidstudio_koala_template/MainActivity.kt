@@ -3,20 +3,17 @@ package com.example.androidstudio_koala_template
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Help
 import com.example.androidstudio_koala_template.ui.theme.AndroidStudioKoalaTemplateTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,34 +31,46 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainContent(modifier: Modifier = Modifier) {
-    var selectedIcon by remember { mutableStateOf("Add") }
+    // Iconos
+    val iconOptions = listOf(
+        "Add" to Icons.Default.Add,
+        "Call" to Icons.Default.Call,
+        "Email" to Icons.Default.Email,
+        "Favorite" to Icons.Default.Favorite,
+        "Home" to Icons.Default.Home,
+        "Info" to Icons.Default.Info,
+        "Person" to Icons.Default.Person,
+        "Search" to Icons.Default.Search,
+        "Settings" to Icons.Default.Settings,
+        "Share" to Icons.Default.Share
+    )
+
+    var selectedIconName by remember { mutableStateOf(iconOptions[0].first) }
     var sliderValue by remember { mutableStateOf(3f) }
     var minValue by remember { mutableStateOf(0f) }
     var maxValue by remember { mutableStateOf(10f) }
     var expanded by remember { mutableStateOf(false) }
 
-    // Guarda el hacer clic en "Enviar"
-    var finalIcon by remember { mutableStateOf("Add") }
+    var finalIconName by remember { mutableStateOf(iconOptions[0].first) }
     var finalSliderValue by remember { mutableStateOf(3) }
 
     Column(
         modifier = modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Intro con título superior del reto
         Text(
-            text = "Reto 1 {Xavier Moreno}",
+            text = "Reto 1",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // El menu hacia abajo
+        // Menu desplegable para seleccionar el icono
         Box {
             TextField(
-                value = selectedIcon,
+                value = selectedIconName,
                 onValueChange = {},
-                label = { Text("Tria un Icon") },
+                label = { Text("Escoge uno de los siguientes iconos") },
                 readOnly = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -72,11 +81,11 @@ fun MainContent(modifier: Modifier = Modifier) {
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                listOf("Add", "Call", "Email").forEach { icon ->
+                iconOptions.forEach { (name, _) ->
                     DropdownMenuItem(
-                        text = { Text(icon) },
+                        text = { Text(name) },
                         onClick = {
-                            selectedIcon = icon
+                            selectedIconName = name
                             expanded = false
                         }
                     )
@@ -86,7 +95,7 @@ fun MainContent(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //Slider con el minimo y el maximo
+        // Slider con el min a max
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -95,7 +104,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Min:")
+                Text("Mínimo:")
                 OutlinedTextField(
                     value = minValue.toString(),
                     onValueChange = { minValue = it.toFloatOrNull() ?: minValue },
@@ -106,7 +115,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Max:")
+                Text("Maximo:")
                 OutlinedTextField(
                     value = maxValue.toString(),
                     onValueChange = { maxValue = it.toFloatOrNull() ?: maxValue },
@@ -117,42 +126,50 @@ fun MainContent(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //Slider del max-min
+        // Slider para seleccionar min a max
         Slider(
             value = sliderValue,
             onValueChange = { sliderValue = it },
-            valueRange = minValue..maxValue,
+            valueRange = minValue..maxValue, // Usamos los valores min y max proporcionados por el usuario
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Boton de enviar
+        // Botón de ENVIAR
         Button(onClick = {
-            finalIcon = selectedIcon
+            finalIconName = selectedIconName
             finalSliderValue = sliderValue.toInt()
         }) {
-            Text("Enviar") //Revisar que envie bien el icono
+            Text("Enviar")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Icono seleccionado final y valor del slider como badged
+        // Mostrar el icono seleccionado con badge
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Icon(
-                imageVector = when (finalIcon) {
-                    "Add" -> Icons.Default.Add
-                    "Call" -> Icons.Default.Call
-                    "Email" -> Icons.Default.Email
-                    else -> Icons.Default.Help
-                },
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp)
-            )
+            val selectedIcon = iconOptions.find { it.first == finalIconName }?.second ?: Icons.Default.Help
+
+            // BadgedBox con el valor del slider
+            BadgedBox(
+                modifier = Modifier.padding(16.dp),
+                badge = {
+                    Badge {
+                        Text(finalSliderValue.toString()) // Aquí mostramos el valor final del slider (que se modifica segun quiera el usuario en el slider)
+                    }
+                }
+            ) {
+                Icon(
+                    imageVector = selectedIcon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(48.dp)
+                )
+            }
+
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = finalSliderValue.toString(),
