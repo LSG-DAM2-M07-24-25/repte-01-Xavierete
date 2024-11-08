@@ -12,6 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Help
 import com.example.androidstudio_koala_template.ui.theme.AndroidStudioKoalaTemplateTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,13 +40,17 @@ fun MainContent(modifier: Modifier = Modifier) {
     var maxValue by remember { mutableStateOf(10f) }
     var expanded by remember { mutableStateOf(false) }
 
+    // Guarda el hacer clic en "Enviar"
+    var finalIcon by remember { mutableStateOf("Add") }
+    var finalSliderValue by remember { mutableStateOf(3) }
+
     Column(
         modifier = modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Intro con titulo superior del reto
+        // Intro con título superior del reto
         Text(
-            text = "Repte 01",
+            text = "Reto 1 {Xavier Moreno}",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
@@ -108,7 +117,7 @@ fun MainContent(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //Slider del max-min (de la barra)
+        //Slider del max-min
         Slider(
             value = sliderValue,
             onValueChange = { sliderValue = it },
@@ -118,20 +127,23 @@ fun MainContent(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botón de enviar
-        Button(onClick = { /* aqui hay que poner una accion */ }) {
-            Text("Enviar")
+        // Boton de enviar
+        Button(onClick = {
+            finalIcon = selectedIcon
+            finalSliderValue = sliderValue.toInt()
+        }) {
+            Text("Enviar") //Revisar que envie bien el icono
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //Selecciona un icono
+        // Icono seleccionado final y valor del slider como badged
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Icon(
-                imageVector = when (selectedIcon) {
+                imageVector = when (finalIcon) {
                     "Add" -> Icons.Default.Add
                     "Call" -> Icons.Default.Call
                     "Email" -> Icons.Default.Email
@@ -143,7 +155,7 @@ fun MainContent(modifier: Modifier = Modifier) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = sliderValue.toInt().toString(),
+                text = finalSliderValue.toString(),
                 fontSize = 24.sp,
                 color = MaterialTheme.colorScheme.primary
             )
