@@ -2,7 +2,8 @@
 
 # Repte 01
 
-Creación de una app en Kotlin con components como Slider, DropDownMenu, Badged,...
+[Documento pdf con más información a modo web](https://wonderxavier.craft.me/iKWcQI49HzNwuj)
+
 
 ## Creado por
 Xavier Moreno Navarro
